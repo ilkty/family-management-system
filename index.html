@@ -15,12 +15,23 @@
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            overflow-x: hidden;
         }
 
         .container {
             max-width: 1400px;
             margin: 0 auto;
             padding: 15px;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .login-container {
@@ -36,15 +47,6 @@
 
         .main-app {
             display: none;
-        }
-
-        .header {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(10px);
-            border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
         }
 
         .nav-tabs {
@@ -65,6 +67,10 @@
             font-size: 14px;
         }
 
+        .nav-tab:hover {
+            background: rgba(102, 126, 234, 0.2);
+        }
+
         .nav-tab.active {
             background: #667eea;
             color: white;
@@ -78,10 +84,17 @@
             border-radius: 15px;
             padding: 25px;
             box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            min-height: 400px;
         }
 
         .content-section.active {
             display: block;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .form-group {
@@ -119,6 +132,7 @@
             cursor: pointer;
             font-weight: 500;
             transition: all 0.3s ease;
+            display: inline-block;
         }
 
         .btn:hover {
@@ -126,10 +140,22 @@
             box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
         }
 
+        .btn:active {
+            transform: translateY(0);
+        }
+
         .btn-danger {
             background: linear-gradient(135deg, #ff6b6b, #ee5a24);
             padding: 8px 16px;
             font-size: 12px;
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+        }
+
+        .btn-info {
+            background: linear-gradient(135deg, #3498db, #2980b9);
         }
 
         .card {
@@ -143,6 +169,74 @@
 
         .card:hover {
             transform: translateX(3px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .calendar {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 8px;
+            margin-top: 20px;
+        }
+
+        .calendar-day {
+            background: #f8f9fa;
+            border: 1px solid #e1e5e9;
+            border-radius: 8px;
+            padding: 8px;
+            min-height: 80px;
+            font-size: 12px;
+        }
+
+        .calendar-day.today {
+            background: #667eea;
+            color: white;
+        }
+
+        .calendar-header {
+            background: #667eea;
+            color: white;
+            text-align: center;
+            padding: 12px 8px;
+            font-weight: bold;
+            border-radius: 8px;
+        }
+
+        .expense-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 12px;
+        }
+
+        .amount {
+            font-weight: bold;
+            color: #e74c3c;
+        }
+
+        .income {
+            color: #27ae60;
+        }
+
+        .user-info {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .admin-badge {
+            background: #e74c3c;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 12px;
+            margin-left: 10px;
         }
 
         .stats-grid {
@@ -164,43 +258,6 @@
             font-size: 2.2em;
             font-weight: bold;
             margin-bottom: 8px;
-        }
-
-        .user-info {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-            flex-wrap: wrap;
-            gap: 15px;
-        }
-
-        .admin-badge {
-            background: #e74c3c;
-            color: white;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-size: 12px;
-            margin-left: 10px;
-        }
-
-        .expense-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            padding: 16px;
-            background: #f8f9fa;
-            border-radius: 10px;
-            margin-bottom: 12px;
-        }
-
-        .amount {
-            font-weight: bold;
-            color: #e74c3c;
-        }
-
-        .income {
-            color: #27ae60;
         }
 
         .modal {
@@ -238,9 +295,26 @@
             color: #333;
         }
 
+        .sheets-status {
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .sheets-status.disconnected {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+        }
+
         @media (max-width: 768px) {
             .container { padding: 10px; }
+            .nav-tabs { justify-content: center; }
             .stats-grid { grid-template-columns: 1fr; }
+            .calendar { gap: 4px; }
+            .calendar-day { min-height: 60px; }
             .expense-item { flex-direction: column; gap: 10px; }
             .user-info { flex-direction: column; text-align: center; }
         }
@@ -268,15 +342,20 @@
         <!-- 메인 애플리케이션 -->
         <div id="mainApp" class="main-app">
             <div class="header">
+                <div id="sheetsStatus" class="sheets-status disconnected">
+                    📊 Google Sheets 연결 안됨 - "Sheets 연결" 버튼을 클릭하세요
+                </div>
                 <div class="user-info">
                     <div>
                         <h1>우리 가족 통합 관리 시스템</h1>
                         <span id="welcomeMessage"></span>
                         <span id="adminBadge" class="admin-badge" style="display: none;">운영자</span>
                     </div>
-                    <button class="btn" onclick="setupSheetsUrl()" style="margin-right: 10px; background: #27ae60;">📊 Sheets 연결</button>
-                    <button class="btn" onclick="syncWithSheets()" style="margin-right: 10px; background: #3498db;">🔄 동기화</button>
-                    <button class="btn" onclick="logoutUser()">로그아웃</button>
+                    <div>
+                        <button class="btn btn-success" onclick="setupSheetsUrl()" style="margin-right: 10px;">📊 Sheets 연결</button>
+                        <button class="btn btn-info" onclick="syncWithSheets()" style="margin-right: 10px;">🔄 동기화</button>
+                        <button class="btn" onclick="logoutUser()">로그아웃</button>
+                    </div>
                 </div>
                 <div class="nav-tabs">
                     <button class="nav-tab active" onclick="showTab('dashboard')">대시보드</button>
@@ -463,44 +542,9 @@
         let budgetItems = [];
         let schedules = [];
 
-// Google Sheets API 관련 변수
-let sheetsApiUrl = '';
+        // Google Sheets 연동 변수
+        let sheetsApiUrl = localStorage.getItem('sheetsApiUrl') || '';
 
-// Google Sheets 저장 함수
-async function saveToSheets(type, data) {
-    if (!sheetsApiUrl) {
-        alert('Google Sheets URL을 먼저 설정해주세요.');
-        return false;
-    }
-
-    try {
-        const response = await fetch(sheetsApiUrl, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                action: 'save',
-                type: type,
-                data: data
-            })
-        });
-        const result = await response.json();
-        return result.success;
-    } catch (error) {
-        console.error('Sheets 저장 오류:', error);
-        return false;
-    }
-}
-
-// URL 저장 함수
-function saveSheetsUrl() {
-    const url = prompt('Google Apps Script 웹 앱 URL을 입력하세요:');
-    if (url) {
-        sheetsApiUrl = url;
-        localStorage.setItem('sheetsApiUrl', url);
-        alert('URL이 저장되었습니다!');
-    }
-}
-        
         // 데이터 저장
         function saveData() {
             try {
@@ -522,20 +566,15 @@ function saveSheetsUrl() {
                 const data = localStorage.getItem('familyData');
                 if (data) {
                     const parsed = JSON.parse(data);
-                    blogPosts = parsed.blogPosts || [];
-                    budgetItems = parsed.budgetItems || [];
-                    schedules = parsed.schedules || [];
-                    
-                    // 날짜 변환
-                    blogPosts = blogPosts.map(post => ({
+                    blogPosts = (parsed.blogPosts || []).map(post => ({
                         ...post,
                         date: new Date(post.date)
                     }));
-                    budgetItems = budgetItems.map(item => ({
+                    budgetItems = (parsed.budgetItems || []).map(item => ({
                         ...item,
                         date: new Date(item.date)
                     }));
-                    schedules = schedules.map(schedule => ({
+                    schedules = (parsed.schedules || []).map(schedule => ({
                         ...schedule,
                         date: new Date(schedule.date)
                     }));
@@ -587,6 +626,54 @@ function saveSheetsUrl() {
             }
         }
 
+        // Google Sheets URL 설정
+        function setupSheetsUrl() {
+            const url = prompt('Google Apps Script 웹 앱 URL을 입력하세요:\n\n예시: https://script.google.com/macros/s/ABC123.../exec');
+            if (url && url.includes('script.google.com/macros')) {
+                sheetsApiUrl = url;
+                localStorage.setItem('sheetsApiUrl', url);
+                updateSheetsStatus(true);
+                alert('✅ Google Sheets URL이 저장되었습니다!\n\n이제 데이터가 Google Sheets와 동기화됩니다.');
+                testConnection();
+            } else if (url) {
+                alert('❌ 올바른 Google Apps Script URL을 입력해주세요.\n\n형식: https://script.google.com/macros/s/.../exec');
+            }
+        }
+
+        // 연결 상태 업데이트
+        function updateSheetsStatus(connected) {
+            const statusEl = document.getElementById('sheetsStatus');
+            if (connected) {
+                statusEl.textContent = '📊 Google Sheets 연결됨 - 가족 간 데이터 공유 가능!';
+                statusEl.className = 'sheets-status';
+            } else {
+                statusEl.textContent = '📊 Google Sheets 연결 안됨 - "Sheets 연결" 버튼을 클릭하세요';
+                statusEl.className = 'sheets-status disconnected';
+            }
+        }
+
+        // 연결 테스트
+        async function testConnection() {
+            if (!sheetsApiUrl) return;
+            
+            try {
+                const response = await fetch(sheetsApiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'test' })
+                return merged;
+        }
+
+        function mergeSchedules(existing, newData) {
+            const merged = [...existing];
+            newData.forEach(newSchedule => {
+                if (!merged.find(schedule => schedule.id === newSchedule.id)) {
+                    merged.push(newSchedule);
+                }
+            });
+            return merged;
+        }
+
         // 로그인
         function loginUser() {
             const id = document.getElementById('loginId').value;
@@ -603,10 +690,21 @@ function saveSheetsUrl() {
                     document.getElementById('adminTab').style.display = 'block';
                 }
                 
+                // Google Sheets URL 로드 및 상태 업데이트
+                const savedUrl = localStorage.getItem('sheetsApiUrl');
+                if (savedUrl) {
+                    sheetsApiUrl = savedUrl;
+                    updateSheetsStatus(true);
+                    console.log('✅ Google Sheets URL 로드됨');
+                } else {
+                    updateSheetsStatus(false);
+                }
+                
                 loadData();
                 updateDashboard();
                 loadBlogPosts();
                 loadBudgetItems();
+                loadSchedules();
                 loadFinanceBoard();
                 if (currentUser.role === 'admin') {
                     loadAdminPanel();
@@ -640,8 +738,8 @@ function saveSheetsUrl() {
         function updateDashboard() {
             const currentMonth = new Date().getMonth();
             const monthlyExpenses = budgetItems
-                .filter(item => item.type === 'expense' && item.date.getMonth() === currentMonth)
-                .reduce((sum, item) => sum + item.amount, 0);
+                .filter(item => item.type === 'expense' && item.date && item.date.getMonth() === currentMonth)
+                .reduce((sum, item) => sum + (item.amount || 0), 0);
             
             document.getElementById('totalBudget').textContent = '₩' + monthlyExpenses.toLocaleString();
             document.getElementById('blogCount').textContent = blogPosts.length;
@@ -651,26 +749,28 @@ function saveSheetsUrl() {
             recentActivity.innerHTML = '';
             
             const recent = [
-                ...blogPosts.slice(-3),
-                ...budgetItems.slice(-3),
-                ...schedules.slice(-3)
-            ].sort((a, b) => b.date - a.date).slice(0, 5);
+                ...blogPosts.slice(-3).map(post => ({ type: 'blog', data: post })),
+                ...budgetItems.slice(-3).map(item => ({ type: 'budget', data: item })),
+                ...schedules.slice(-3).map(schedule => ({ type: 'schedule', data: schedule }))
+            ].filter(activity => activity.data && activity.data.date)
+             .sort((a, b) => new Date(b.data.date) - new Date(a.data.date))
+             .slice(0, 5);
 
             recent.forEach(activity => {
                 const card = document.createElement('div');
                 card.className = 'card';
                 
                 let content = '';
-                if (activity.title && activity.content) {
-                    content = activity.author + '님이 "' + activity.title + '" 블로그 포스트를 작성했습니다.';
-                } else if (activity.description && activity.amount) {
-                    const type = activity.type === 'income' ? '수입' : '지출';
-                    content = activity.author + '님이 ' + type + ' "' + activity.description + '"을(를) ₩' + activity.amount.toLocaleString() + '으로 기록했습니다.';
-                } else if (activity.title && activity.time) {
-                    content = activity.author + '님이 "' + activity.title + '" 일정을 추가했습니다.';
+                if (activity.type === 'blog') {
+                    content = (activity.data.author || '익명') + '님이 "' + (activity.data.title || '제목없음') + '" 블로그 포스트를 작성했습니다.';
+                } else if (activity.type === 'budget') {
+                    const type = activity.data.type === 'income' ? '수입' : '지출';
+                    content = (activity.data.author || '익명') + '님이 ' + type + ' "' + (activity.data.description || '설명없음') + '"을(를) ₩' + (activity.data.amount || 0).toLocaleString() + '으로 기록했습니다.';
+                } else {
+                    content = (activity.data.author || '익명') + '님이 "' + (activity.data.title || '제목없음') + '" 일정을 추가했습니다.';
                 }
                 
-                card.innerHTML = '<p><strong>' + content + '</strong></p><small style="color: #666;">' + activity.date.toLocaleDateString() + '</small>';
+                card.innerHTML = '<p><strong>' + content + '</strong></p><small style="color: #666;">' + (activity.data.date ? activity.data.date.toLocaleDateString() : '날짜없음') + '</small>';
                 recentActivity.appendChild(card);
             });
         }
@@ -678,20 +778,39 @@ function saveSheetsUrl() {
         // 블로그 포스트 로드
         function loadBlogPosts() {
             const container = document.getElementById('blogPosts');
+            if (!container) return;
+            
             container.innerHTML = '';
             
-            blogPosts.sort((a, b) => b.date - a.date).forEach(post => {
-                const canEdit = currentUser.role === 'admin' || currentUser.id === post.authorId;
+            if (!Array.isArray(blogPosts)) {
+                blogPosts = [];
+                return;
+            }
+            
+            blogPosts.sort((a, b) => {
+                const dateA = a.date ? new Date(a.date) : new Date(0);
+                const dateB = b.date ? new Date(b.date) : new Date(0);
+                return dateB - dateA;
+            }).forEach(post => {
+                if (!post) return;
+                
+                const canEdit = currentUser && (currentUser.role === 'admin' || currentUser.id === post.authorId);
                 const postElement = document.createElement('div');
                 postElement.className = 'card';
+                
+                const title = post.title || '제목없음';
+                const content = post.content || '내용없음';
+                const author = post.author || '익명';
+                const date = post.date ? new Date(post.date).toLocaleDateString() : '날짜없음';
+                
                 postElement.innerHTML = `
                     <div style="display: flex; justify-content: space-between; align-items: flex-start;">
                         <div style="flex: 1;">
-                            <h3 style="margin-bottom: 10px;">${post.title}</h3>
-                            <p style="margin-bottom: 10px;">${post.content}</p>
-                            <small style="color: #666;">작성자: ${post.author} | 날짜: ${post.date.toLocaleDateString()}</small>
+                            <h3 style="margin-bottom: 10px;">${title}</h3>
+                            <p style="margin-bottom: 10px;">${content}</p>
+                            <small style="color: #666;">작성자: ${author} | 날짜: ${date}</small>
                         </div>
-                        ${canEdit ? `<button class="btn btn-danger" onclick="removeBlogPost(${post.id})" style="margin-left: 10px;">삭제</button>` : ''}
+                        ${canEdit ? `<button class="btn btn-danger" onclick="removeBlogPost(${post.id || 0})" style="margin-left: 10px;">삭제</button>` : ''}
                     </div>
                 `;
                 container.appendChild(postElement);
@@ -701,29 +820,37 @@ function saveSheetsUrl() {
         // 가계부 항목 로드
         function loadBudgetItems() {
             const container = document.getElementById('budgetItems');
+            if (!container) return;
+            
             container.innerHTML = '';
             
             let totalIncome = 0;
             let totalExpense = 0;
             
-            budgetItems.sort((a, b) => b.date - a.date).forEach(item => {
+            budgetItems.sort((a, b) => {
+                const dateA = a.date ? new Date(a.date) : new Date(0);
+                const dateB = b.date ? new Date(b.date) : new Date(0);
+                return dateB - dateA;
+            }).forEach(item => {
+                if (!item) return;
+                
                 if (item.type === 'income') {
-                    totalIncome += item.amount;
+                    totalIncome += item.amount || 0;
                 } else {
-                    totalExpense += item.amount;
+                    totalExpense += item.amount || 0;
                 }
                 
-                const canEdit = currentUser.role === 'admin' || currentUser.id === item.authorId;
+                const canEdit = currentUser && (currentUser.role === 'admin' || currentUser.id === item.authorId);
                 const itemElement = document.createElement('div');
                 itemElement.className = 'expense-item';
                 itemElement.innerHTML = `
                     <div>
-                        <strong>${item.description}</strong><br>
-                        <small>카테고리: ${item.category} | ${item.author} | ${item.date.toLocaleDateString()}</small>
+                        <strong>${item.description || '설명없음'}</strong><br>
+                        <small>카테고리: ${item.category || '기타'} | ${item.author || '익명'} | ${item.date ? new Date(item.date).toLocaleDateString() : '날짜없음'}</small>
                     </div>
                     <div style="text-align: right;">
-                        <div class="${item.type === 'income' ? 'income' : 'amount'}">${item.type === 'income' ? '+' : '-'}₩${item.amount.toLocaleString()}</div>
-                        ${canEdit ? `<button class="btn btn-danger" onclick="removeBudgetItem(${item.id})" style="margin-top: 5px;">삭제</button>` : ''}
+                        <div class="${item.type === 'income' ? 'income' : 'amount'}">${item.type === 'income' ? '+' : '-'}₩${(item.amount || 0).toLocaleString()}</div>
+                        ${canEdit ? `<button class="btn btn-danger" onclick="removeBudgetItem(${item.id || 0})" style="margin-top: 5px;">삭제</button>` : ''}
                     </div>
                 `;
                 container.appendChild(itemElement);
@@ -734,22 +861,128 @@ function saveSheetsUrl() {
             document.getElementById('netAmount').textContent = '₩' + (totalIncome - totalExpense).toLocaleString();
         }
 
+        // 일정 로드
+        function loadSchedules() {
+            const container = document.getElementById('calendarView');
+            if (!container) return;
+            
+            container.innerHTML = '';
+            
+            const currentDate = new Date();
+            const year = currentDate.getFullYear();
+            const month = currentDate.getMonth();
+            
+            const calendarHeader = document.createElement('h3');
+            calendarHeader.textContent = year + '년 ' + (month + 1) + '월';
+            calendarHeader.style.textAlign = 'center';
+            calendarHeader.style.marginBottom = '20px';
+            container.appendChild(calendarHeader);
+            
+            const daysOfWeek = ['일', '월', '화', '수', '목', '금', '토'];
+            const calendarGrid = document.createElement('div');
+            calendarGrid.className = 'calendar';
+            
+            daysOfWeek.forEach(day => {
+                const dayHeader = document.createElement('div');
+                dayHeader.className = 'calendar-header';
+                dayHeader.textContent = day;
+                calendarGrid.appendChild(dayHeader);
+            });
+            
+            const firstDay = new Date(year, month, 1).getDay();
+            const lastDate = new Date(year, month + 1, 0).getDate();
+            
+            for (let i = 0; i < firstDay; i++) {
+                const emptyCell = document.createElement('div');
+                emptyCell.className = 'calendar-day';
+                calendarGrid.appendChild(emptyCell);
+            }
+            
+            for (let date = 1; date <= lastDate; date++) {
+                const dateCell = document.createElement('div');
+                dateCell.className = 'calendar-day';
+                
+                const today = new Date();
+                if (date === today.getDate() && month === today.getMonth() && year === today.getFullYear()) {
+                    dateCell.classList.add('today');
+                }
+                
+                dateCell.innerHTML = '<strong>' + date + '</strong>';
+                
+                const daySchedules = schedules.filter(s => 
+                    s.date && s.date.getDate() === date && 
+                    s.date.getMonth() === month && 
+                    s.date.getFullYear() === year
+                );
+                
+                daySchedules.forEach(schedule => {
+                    const scheduleDiv = document.createElement('div');
+                    scheduleDiv.style.fontSize = '10px';
+                    scheduleDiv.style.background = '#667eea';
+                    scheduleDiv.style.color = 'white';
+                    scheduleDiv.style.padding = '2px 4px';
+                    scheduleDiv.style.borderRadius = '4px';
+                    scheduleDiv.style.marginTop = '2px';
+                    scheduleDiv.textContent = (schedule.time || '') + ' ' + (schedule.title || '');
+                    dateCell.appendChild(scheduleDiv);
+                });
+                
+                calendarGrid.appendChild(dateCell);
+            }
+            
+            container.appendChild(calendarGrid);
+            
+            const scheduleList = document.createElement('div');
+            scheduleList.style.marginTop = '30px';
+            scheduleList.innerHTML = '<h3>이번 달 일정</h3>';
+            
+            const monthSchedules = schedules.filter(s => 
+                s.date && s.date.getMonth() === month && s.date.getFullYear() === year
+            ).sort((a, b) => a.date - b.date);
+            
+            monthSchedules.forEach(schedule => {
+                const canEdit = currentUser && (currentUser.role === 'admin' || currentUser.id === schedule.authorId);
+                const scheduleElement = document.createElement('div');
+                scheduleElement.className = 'card';
+                scheduleElement.innerHTML = `
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <div>
+                            <strong>${schedule.title || '제목없음'}</strong><br>
+                            <small>${schedule.date ? schedule.date.toLocaleDateString() : '날짜없음'} ${schedule.time || ''} | ${schedule.author || '익명'}</small><br>
+                            <span>${schedule.description || ''}</span>
+                        </div>
+                        ${canEdit ? `<button class="btn btn-danger" onclick="removeSchedule(${schedule.id || 0})">삭제</button>` : ''}
+                    </div>
+                `;
+                scheduleList.appendChild(scheduleElement);
+            });
+            
+            container.appendChild(scheduleList);
+        }
+
         // 재정현황 로드
         function loadFinanceBoard() {
             const container = document.getElementById('financeBoard');
+            if (!container) return;
+            
             container.innerHTML = '';
             
-            const currentYear = new Date().getFullYear();
+            const currentDate = new Date();
+            const currentYear = currentDate.getFullYear();
             const months = [];
             
             for (let i = 0; i < 12; i++) {
                 const monthlyIncome = budgetItems
-                    .filter(item => item.type === 'income' && item.date.getMonth() === i && item.date.getFullYear() === currentYear)
-                    .reduce((sum, item) => sum + item.amount, 0);
+                    .filter(item => item.type === 'income' && 
+                           item.date && item.date.getMonth() === i && 
+                           item.date.getFullYear() === currentYear)
+                    .reduce((sum, item) => sum + (item.amount || 0), 0);
                 
                 const monthlyExpense = budgetItems
-                    .filter(item => item.type === 'expense' && item.date.getMonth() === i && item.date.getFullYear() === currentYear)
-                    .reduce((sum, item) => sum + item.amount, 0);
+                    .filter(item => item.type === 'expense' && 
+                           item.date && item.date.getMonth() === i && 
+                           item.date.getFullYear() === currentYear)
+                    .reduce((sum, item) => sum + (item.amount || 0), 0);
                 
                 if (monthlyIncome > 0 || monthlyExpense > 0) {
                     months.push({
@@ -794,6 +1027,8 @@ function saveSheetsUrl() {
         // 관리자 패널 로드
         function loadAdminPanel() {
             const userList = document.getElementById('userList');
+            if (!userList) return;
+            
             userList.innerHTML = '';
             
             Object.entries(users).forEach(([id, user]) => {
@@ -810,160 +1045,244 @@ function saveSheetsUrl() {
             });
             
             const systemStats = document.getElementById('systemStats');
-            systemStats.innerHTML = `
-                <div style="margin-bottom: 15px;"><strong>총 사용자:</strong> ${Object.keys(users).length}명</div>
-                <div style="margin-bottom: 15px;"><strong>총 블로그 포스트:</strong> ${blogPosts.length}개</div>
-                <div style="margin-bottom: 15px;"><strong>총 가계부 항목:</strong> ${budgetItems.length}개</div>
-                <div style="margin-bottom: 15px;"><strong>총 일정:</strong> ${schedules.length}개</div>
-                <div style="margin-top: 20px;">
-                    <button class="btn" onclick="exportData()">데이터 내보내기</button>
-                    <button class="btn" onclick="clearAllData()" style="margin-left: 10px; background: #e74c3c;">모든 데이터 삭제</button>
-                </div>
-            `;
+            if (systemStats) {
+                systemStats.innerHTML = `
+                    <div style="margin-bottom: 15px;"><strong>총 사용자:</strong> ${Object.keys(users).length}명</div>
+                    <div style="margin-bottom: 15px;"><strong>총 블로그 포스트:</strong> ${blogPosts.length}개</div>
+                    <div style="margin-bottom: 15px;"><strong>총 가계부 항목:</strong> ${budgetItems.length}개</div>
+                    <div style="margin-bottom: 15px;"><strong>총 일정:</strong> ${schedules.length}개</div>
+                    <div style="margin-top: 20px;">
+                        <button class="btn" onclick="exportData()">데이터 내보내기</button>
+                        <button class="btn" onclick="clearAllData()" style="margin-left: 10px; background: #e74c3c;">모든 데이터 삭제</button>
+                    </div>
+                `;
+            }
         }
 
         // 모달 함수들
         function openBlogModal() {
-            document.getElementById('blogModal').style.display = 'block';
+            const modal = document.getElementById('blogModal');
+            if (modal) modal.style.display = 'block';
         }
 
         function closeBlogModal() {
-            document.getElementById('blogModal').style.display = 'none';
-            document.getElementById('blogTitle').value = '';
-            document.getElementById('blogContent').value = '';
+            const modal = document.getElementById('blogModal');
+            const titleElement = document.getElementById('blogTitle');
+            const contentElement = document.getElementById('blogContent');
+            
+            if (modal) modal.style.display = 'none';
+            if (titleElement) titleElement.value = '';
+            if (contentElement) contentElement.value = '';
         }
 
         function openBudgetModal() {
-            document.getElementById('budgetModal').style.display = 'block';
+            const modal = document.getElementById('budgetModal');
+            if (modal) modal.style.display = 'block';
         }
 
         function closeBudgetModal() {
-            document.getElementById('budgetModal').style.display = 'none';
-            document.getElementById('budgetDescription').value = '';
-            document.getElementById('budgetAmount').value = '';
+            const modal = document.getElementById('budgetModal');
+            const descriptionElement = document.getElementById('budgetDescription');
+            const amountElement = document.getElementById('budgetAmount');
+            
+            if (modal) modal.style.display = 'none';
+            if (descriptionElement) descriptionElement.value = '';
+            if (amountElement) amountElement.value = '';
         }
 
         function openScheduleModal() {
-            document.getElementById('scheduleModal').style.display = 'block';
-            const today = new Date();
-            document.getElementById('scheduleDate').value = today.toISOString().split('T')[0];
+            const modal = document.getElementById('scheduleModal');
+            const dateElement = document.getElementById('scheduleDate');
+            
+            if (modal) modal.style.display = 'block';
+            if (dateElement) {
+                const today = new Date();
+                dateElement.value = today.toISOString().split('T')[0];
+            }
         }
 
         function closeScheduleModal() {
-            document.getElementById('scheduleModal').style.display = 'none';
-            document.getElementById('scheduleTitle').value = '';
-            document.getElementById('scheduleDate').value = '';
-            document.getElementById('scheduleTime').value = '';
-            document.getElementById('scheduleDescription').value = '';
+            const modal = document.getElementById('scheduleModal');
+            const titleElement = document.getElementById('scheduleTitle');
+            const dateElement = document.getElementById('scheduleDate');
+            const timeElement = document.getElementById('scheduleTime');
+            const descriptionElement = document.getElementById('scheduleDescription');
+            
+            if (modal) modal.style.display = 'none';
+            if (titleElement) titleElement.value = '';
+            if (dateElement) dateElement.value = '';
+            if (timeElement) timeElement.value = '';
+            if (descriptionElement) descriptionElement.value = '';
         }
 
-  // 수정된 블로그 저장 함수
+        // 데이터 추가 함수들
         async function saveBlogPost() {
             const title = document.getElementById('blogTitle').value;
             const content = document.getElementById('blogContent').value;
             
-            if (title && content) {
-                const newPost = {
-                    id: Date.now(),
-                    title: title,
-                    content: content,
-                    author: currentUser.name,
-                    authorId: currentUser.id,
-                    date: new Date()
-                };
-                
-                blogPosts.push(newPost);
-                saveData(); // 로컬 저장
-                
-                // Google Sheets에도 저장
-                await saveToSheets('blog', newPost);
-                
-                loadBlogPosts();
-                updateDashboard();
-                closeBlogModal();
-            } else {
+            if (!title || !content) {
                 alert('제목과 내용을 모두 입력해주세요.');
+                return;
             }
+            
+            if (!currentUser) {
+                alert('로그인이 필요합니다.');
+                return;
+            }
+            
+            const newPost = {
+                id: Date.now(),
+                title: title,
+                content: content,
+                author: currentUser.name,
+                authorId: currentUser.id,
+                date: new Date()
+            };
+            
+            blogPosts.push(newPost);
+            saveData();
+            
+            // Google Sheets에도 저장 시도
+            if (sheetsApiUrl) {
+                const success = await saveToSheets('blog', newPost);
+                if (success) {
+                    console.log('✅ Google Sheets에 블로그 포스트 저장됨');
+                }
+            }
+            
+            loadBlogPosts();
+            updateDashboard();
+            closeBlogModal();
         }
 
-        function saveBudgetItem() {
+        async function saveBudgetItem() {
             const type = document.getElementById('budgetType').value;
             const description = document.getElementById('budgetDescription').value;
             const amount = parseInt(document.getElementById('budgetAmount').value);
             const category = document.getElementById('budgetCategory').value;
             
-            if (description && amount) {
-                const newItem = {
-                    id: Date.now(),
-                    type: type,
-                    description: description,
-                    amount: amount,
-                    category: category,
-                    author: currentUser.name,
-                    authorId: currentUser.id,
-                    date: new Date()
-                };
-                budgetItems.push(newItem);
-                saveData();
-                loadBudgetItems();
-                loadFinanceBoard();
-                updateDashboard();
-                closeBudgetModal();
-            } else {
-                alert('내용과 금액을 모두 입력해주세요.');
+            if (!description || !amount || isNaN(amount)) {
+                alert('내용과 올바른 금액을 입력해주세요.');
+                return;
             }
+            
+            if (!currentUser) {
+                alert('로그인이 필요합니다.');
+                return;
+            }
+            
+            const newItem = {
+                id: Date.now(),
+                type: type,
+                description: description,
+                amount: amount,
+                category: category,
+                author: currentUser.name,
+                authorId: currentUser.id,
+                date: new Date()
+            };
+            
+            budgetItems.push(newItem);
+            saveData();
+            
+            // Google Sheets에도 저장 시도
+            if (sheetsApiUrl) {
+                const success = await saveToSheets('budget', newItem);
+                if (success) {
+                    console.log('✅ Google Sheets에 가계부 항목 저장됨');
+                }
+            }
+            
+            loadBudgetItems();
+            loadFinanceBoard();
+            updateDashboard();
+            closeBudgetModal();
         }
 
-        function saveSchedule() {
+        async function saveSchedule() {
             const title = document.getElementById('scheduleTitle').value;
-            const date = new Date(document.getElementById('scheduleDate').value);
+            const dateValue = document.getElementById('scheduleDate').value;
             const time = document.getElementById('scheduleTime').value;
             const description = document.getElementById('scheduleDescription').value;
             
-            if (title && date && time) {
-                const newSchedule = {
-                    id: Date.now(),
-                    title: title,
-                    date: date,
-                    time: time,
-                    description: description,
-                    author: currentUser.name,
-                    authorId: currentUser.id
-                };
-                schedules.push(newSchedule);
-                saveData();
-                updateDashboard();
-                closeScheduleModal();
-            } else {
+            if (!title || !dateValue || !time) {
                 alert('제목, 날짜, 시간을 모두 입력해주세요.');
+                return;
             }
+            
+            if (!currentUser) {
+                alert('로그인이 필요합니다.');
+                return;
+            }
+            
+            const date = new Date(dateValue);
+            if (isNaN(date.getTime())) {
+                alert('올바른 날짜를 입력해주세요.');
+                return;
+            }
+            
+            const newSchedule = {
+                id: Date.now(),
+                title: title,
+                date: date,
+                time: time,
+                description: description || '',
+                author: currentUser.name,
+                authorId: currentUser.id
+            };
+            
+            schedules.push(newSchedule);
+            saveData();
+            
+            // Google Sheets에도 저장 시도
+            if (sheetsApiUrl) {
+                const success = await saveToSheets('schedule', newSchedule);
+                if (success) {
+                    console.log('✅ Google Sheets에 일정 저장됨');
+                }
+            }
+            
+            loadSchedules();
+            updateDashboard();
+            closeScheduleModal();
         }
 
         // 삭제 함수들
         function removeBlogPost(id) {
-            if (confirm('정말로 이 포스트를 삭제하시겠습니까?')) {
-                blogPosts = blogPosts.filter(post => post.id !== id);
-                saveData();
-                loadBlogPosts();
-                updateDashboard();
-            }
+            if (!confirm('정말로 이 포스트를 삭제하시겠습니까?')) return;
+            
+            blogPosts = blogPosts.filter(post => post.id !== id);
+            saveData();
+            loadBlogPosts();
+            updateDashboard();
         }
 
         function removeBudgetItem(id) {
-            if (confirm('정말로 이 항목을 삭제하시겠습니까?')) {
-                budgetItems = budgetItems.filter(item => item.id !== id);
-                saveData();
-                loadBudgetItems();
-                loadFinanceBoard();
-                updateDashboard();
-            }
+            if (!confirm('정말로 이 항목을 삭제하시겠습니까?')) return;
+            
+            budgetItems = budgetItems.filter(item => item.id !== id);
+            saveData();
+            loadBudgetItems();
+            loadFinanceBoard();
+            updateDashboard();
+        }
+
+        function removeSchedule(id) {
+            if (!confirm('정말로 이 일정을 삭제하시겠습니까?')) return;
+            
+            schedules = schedules.filter(schedule => schedule.id !== id);
+            saveData();
+            loadSchedules();
+            updateDashboard();
         }
 
         function removeUser(userId) {
-            if (confirm('정말로 ' + users[userId].name + ' 사용자를 삭제하시겠습니까?')) {
-                delete users[userId];
-                loadAdminPanel();
-            }
+            if (!users[userId]) return;
+            
+            if (!confirm('정말로 ' + users[userId].name + ' 사용자를 삭제하시겠습니까?')) return;
+            
+            delete users[userId];
+            loadAdminPanel();
         }
 
         // 관리자 기능
@@ -989,20 +1308,20 @@ function saveSheetsUrl() {
         }
 
         function clearAllData() {
-            if (confirm('정말로 모든 데이터를 삭제하시겠습니까?')) {
-                if (confirm('다시 한 번 확인합니다. 모든 데이터가 삭제됩니다.')) {
-                    blogPosts = [];
-                    budgetItems = [];
-                    schedules = [];
-                    saveData();
-                    updateDashboard();
-                    loadBlogPosts();
-                    loadBudgetItems();
-                    loadFinanceBoard();
-                    loadAdminPanel();
-                    alert('모든 데이터가 삭제되었습니다.');
-                }
-            }
+            if (!confirm('정말로 모든 데이터를 삭제하시겠습니까?')) return;
+            if (!confirm('다시 한 번 확인합니다. 모든 데이터가 삭제됩니다.')) return;
+            
+            blogPosts = [];
+            budgetItems = [];
+            schedules = [];
+            saveData();
+            updateDashboard();
+            loadBlogPosts();
+            loadBudgetItems();
+            loadSchedules();
+            loadFinanceBoard();
+            loadAdminPanel();
+            alert('모든 데이터가 삭제되었습니다.');
         }
 
         // 모달 외부 클릭 시 닫기
@@ -1017,14 +1336,28 @@ function saveSheetsUrl() {
 
         // 초기화
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('🚀 가족 관리 시스템 시작');
+            
+            // Google Sheets URL 로드
+            const savedUrl = localStorage.getItem('sheetsApiUrl');
+            if (savedUrl) {
+                sheetsApiUrl = savedUrl;
+                updateSheetsStatus(true);
+            } else {
+                updateSheetsStatus(false);
+            }
+            
             loadData();
             
             // 엔터 키로 로그인
-            document.getElementById('loginPassword').addEventListener('keypress', function(e) {
-                if (e.key === 'Enter') {
-                    loginUser();
-                }
-            });
+            const loginPassword = document.getElementById('loginPassword');
+            if (loginPassword) {
+                loginPassword.addEventListener('keypress', function(e) {
+                    if (e.key === 'Enter') {
+                        loginUser();
+                    }
+                });
+            }
             
             // 페이지 종료 시 자동 저장
             window.addEventListener('beforeunload', function() {
@@ -1032,7 +1365,141 @@ function saveSheetsUrl() {
                     saveData();
                 }
             });
+            
+            console.log('✅ 시스템 초기화 완료');
         });
     </script>
 </body>
 </html>
+                const result = await response.json();
+                if (result.success) {
+                    updateSheetsStatus(true);
+                    console.log('✅ Google Sheets 연결 성공');
+                }
+            } catch (error) {
+                console.error('연결 테스트 오류:', error);
+                updateSheetsStatus(false);
+            }
+        }
+
+        // Google Sheets에 데이터 저장
+        async function saveToSheets(type, data) {
+            if (!sheetsApiUrl) {
+                console.log('Google Sheets URL이 설정되지 않음');
+                return false;
+            }
+
+            try {
+                const response = await fetch(sheetsApiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'save',
+                        type: type,
+                        data: data
+                    })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    console.log('✅ Google Sheets 저장 성공:', type);
+                    return true;
+                } else {
+                    console.error('❌ Sheets 저장 실패:', result.error);
+                    return false;
+                }
+            } catch (error) {
+                console.error('❌ Sheets 저장 오류:', error);
+                return false;
+            }
+        }
+
+        // 동기화 함수
+        async function syncWithSheets() {
+            if (!sheetsApiUrl) {
+                alert('❌ Google Sheets URL을 먼저 설정해주세요.\n\n"📊 Sheets 연결" 버튼을 클릭하세요.');
+                return;
+            }
+
+            try {
+                const response = await fetch(sheetsApiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'load' })
+                });
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    parseSheetData(result.data);
+                    updateDashboard();
+                    loadBlogPosts();
+                    loadBudgetItems();
+                    alert('🔄 동기화 완료!\n\nGoogle Sheets에서 최신 데이터를 불러왔습니다.');
+                } else {
+                    alert('❌ 동기화 실패\n\nGoogle Sheets에서 데이터를 불러올 수 없습니다.');
+                }
+            } catch (error) {
+                console.error('동기화 오류:', error);
+                alert('❌ 동기화 실패\n\n' + error.message);
+            }
+        }
+
+        // Sheets 데이터 파싱
+        function parseSheetData(sheetData) {
+            const newBlogPosts = [];
+            const newBudgetItems = [];
+            const newSchedules = [];
+
+            sheetData.slice(1).forEach(row => {
+                if (row[1] && row[2]) {
+                    try {
+                        const data = JSON.parse(row[2]);
+                        
+                        if (row[1] === 'blog') {
+                            newBlogPosts.push({
+                                ...data,
+                                date: new Date(data.date)
+                            });
+                        } else if (row[1] === 'budget') {
+                            newBudgetItems.push({
+                                ...data,
+                                date: new Date(data.date)
+                            });
+                        } else if (row[1] === 'schedule') {
+                            newSchedules.push({
+                                ...data,
+                                date: new Date(data.date)
+                            });
+                        }
+                    } catch (e) {
+                        console.error('데이터 파싱 오류:', e);
+                    }
+                }
+            });
+
+            // 기존 데이터와 병합 (중복 제거)
+            blogPosts = mergePosts(blogPosts, newBlogPosts);
+            budgetItems = mergeItems(budgetItems, newBudgetItems);
+            schedules = mergeSchedules(schedules, newSchedules);
+            
+            // 로컬에도 저장
+            saveData();
+        }
+
+        // 데이터 병합 함수들
+        function mergePosts(existing, newData) {
+            const merged = [...existing];
+            newData.forEach(newPost => {
+                if (!merged.find(post => post.id === newPost.id)) {
+                    merged.push(newPost);
+                }
+            });
+            return merged;
+        }
+
+        function mergeItems(existing, newData) {
+            const merged = [...existing];
+            newData.forEach(newItem => {
+                if (!merged.find(item => item.id === newItem.id)) {
+                    merged.push(newItem);
+                }
+            });
