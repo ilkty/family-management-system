@@ -543,7 +543,7 @@
         let schedules = [];
 
         // Google Sheets 연동 변수
-        let sheetsApiUrl = localStorage.getItem('sheetsApiUrl') || '';
+        let sheetsApiUrl = '';
 
         // 데이터 저장
         function saveData() {
@@ -555,8 +555,13 @@
                     lastSaved: new Date().toISOString()
                 };
                 localStorage.setItem('familyData', JSON.stringify(data));
+                console.log('✅ 시스템 초기화 완료');
+        });
+    </script>
+</body>
+</html>✅ 데이터 저장 완료');
             } catch (error) {
-                console.error('저장 오류:', error);
+                console.error('❌ 저장 오류:', error);
             }
         }
 
@@ -578,8 +583,9 @@
                         ...schedule,
                         date: new Date(schedule.date)
                     }));
+                    console.log('✅ 기존 데이터 로드됨');
                 } else {
-                    // 초기 데이터
+                    // 초기 데모 데이터
                     blogPosts = [{
                         id: 1,
                         title: '가족 여행 계획',
@@ -620,9 +626,10 @@
                         authorId: 'mom'
                     }];
                     saveData();
+                    console.log('✅ 초기 데모 데이터 생성됨');
                 }
             } catch (error) {
-                console.error('로드 오류:', error);
+                console.error('❌ 로드 오류:', error);
             }
         }
 
@@ -661,7 +668,145 @@
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({ action: 'test' })
-                return merged;
+                });
+                const result = await response.json();
+                if (result.success) {
+                    updateSheetsStatus(true);
+                    console.log('✅ Google Sheets 연결 성공');
+                } else {
+                    updateSheetsStatus(false);
+                    console.log('❌ Google Sheets 연결 실패');
+                }
+            } catch (error) {
+                console.error('❌ 연결 테스트 오류:', error);
+                updateSheetsStatus(false);
+            }
+        }
+
+        // Google Sheets에 데이터 저장
+        async function saveToSheets(type, data) {
+            if (!sheetsApiUrl) {
+                console.log('Google Sheets URL이 설정되지 않음');
+                return false;
+            }
+
+            try {
+                const response = await fetch(sheetsApiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'save',
+                        type: type,
+                        data: data
+                    })
+                });
+                const result = await response.json();
+                if (result.success) {
+                    console.log('✅ Google Sheets 저장 성공:', type);
+                    return true;
+                } else {
+                    console.error('❌ Sheets 저장 실패:', result.error);
+                    return false;
+                }
+            } catch (error) {
+                console.error('❌ Sheets 저장 오류:', error);
+                return false;
+            }
+        }
+
+        // 동기화 함수
+        async function syncWithSheets() {
+            if (!sheetsApiUrl) {
+                alert('❌ Google Sheets URL을 먼저 설정해주세요.\n\n"📊 Sheets 연결" 버튼을 클릭하세요.');
+                return;
+            }
+
+            try {
+                const response = await fetch(sheetsApiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ action: 'load' })
+                });
+                const result = await response.json();
+                
+                if (result.success && result.data) {
+                    parseSheetData(result.data);
+                    updateDashboard();
+                    loadBlogPosts();
+                    loadBudgetItems();
+                    loadSchedules();
+                    loadFinanceBoard();
+                    alert('🔄 동기화 완료!\n\nGoogle Sheets에서 최신 데이터를 불러왔습니다.');
+                } else {
+                    alert('❌ 동기화 실패\n\nGoogle Sheets에서 데이터를 불러올 수 없습니다.');
+                }
+            } catch (error) {
+                console.error('동기화 오류:', error);
+                alert('❌ 동기화 실패\n\n' + error.message);
+            }
+        }
+
+        // Sheets 데이터 파싱
+        function parseSheetData(sheetData) {
+            const newBlogPosts = [];
+            const newBudgetItems = [];
+            const newSchedules = [];
+
+            sheetData.slice(1).forEach(row => {
+                if (row[1] && row[2]) {
+                    try {
+                        const data = JSON.parse(row[2]);
+                        
+                        if (row[1] === 'blog') {
+                            newBlogPosts.push({
+                                ...data,
+                                date: new Date(data.date)
+                            });
+                        } else if (row[1] === 'budget') {
+                            newBudgetItems.push({
+                                ...data,
+                                date: new Date(data.date)
+                            });
+                        } else if (row[1] === 'schedule') {
+                            newSchedules.push({
+                                ...data,
+                                date: new Date(data.date)
+                            });
+                        }
+                    } catch (e) {
+                        console.error('데이터 파싱 오류:', e);
+                    }
+                }
+            });
+
+            // 기존 데이터와 병합 (중복 제거)
+            blogPosts = mergePosts(blogPosts, newBlogPosts);
+            budgetItems = mergeItems(budgetItems, newBudgetItems);
+            schedules = mergeSchedules(schedules, newSchedules);
+            
+            // 로컬에도 저장
+            saveData();
+        }
+
+        // 데이터 병합 함수들
+        function mergePosts(existing, newData) {
+            const merged = [...existing];
+            newData.forEach(newPost => {
+                if (!merged.find(post => post.id === newPost.id)) {
+                    merged.push(newPost);
+                }
+            });
+            return merged;
+        }
+
+        function mergeItems(existing, newData) {
+            const merged = [...existing];
+            newData.forEach(newItem => {
+                if (!merged.find(item => item.id === newItem.id)) {
+                    merged.push(newItem);
+                }
+            });
+            return merged;
         }
 
         function mergeSchedules(existing, newData) {
@@ -678,6 +823,8 @@
         function loginUser() {
             const id = document.getElementById('loginId').value;
             const password = document.getElementById('loginPassword').value;
+
+            console.log('로그인 시도:', id, password); // 디버깅용
 
             if (users[id] && users[id].password === password) {
                 currentUser = { id, ...users[id] };
@@ -709,8 +856,11 @@
                 if (currentUser.role === 'admin') {
                     loadAdminPanel();
                 }
+                
+                console.log('✅ 로그인 성공:', currentUser.name);
             } else {
                 alert('아이디 또는 비밀번호가 올바르지 않습니다.');
+                console.log('❌ 로그인 실패');
             }
         }
 
@@ -724,6 +874,7 @@
             document.getElementById('loginId').value = '';
             document.getElementById('loginPassword').value = '';
             showTab('dashboard');
+            console.log('✅ 로그아웃 완료');
         }
 
         // 탭 전환
@@ -1366,140 +1517,4 @@
                 }
             });
             
-            console.log('✅ 시스템 초기화 완료');
-        });
-    </script>
-</body>
-</html>
-                const result = await response.json();
-                if (result.success) {
-                    updateSheetsStatus(true);
-                    console.log('✅ Google Sheets 연결 성공');
-                }
-            } catch (error) {
-                console.error('연결 테스트 오류:', error);
-                updateSheetsStatus(false);
-            }
-        }
-
-        // Google Sheets에 데이터 저장
-        async function saveToSheets(type, data) {
-            if (!sheetsApiUrl) {
-                console.log('Google Sheets URL이 설정되지 않음');
-                return false;
-            }
-
-            try {
-                const response = await fetch(sheetsApiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        action: 'save',
-                        type: type,
-                        data: data
-                    })
-                });
-                const result = await response.json();
-                if (result.success) {
-                    console.log('✅ Google Sheets 저장 성공:', type);
-                    return true;
-                } else {
-                    console.error('❌ Sheets 저장 실패:', result.error);
-                    return false;
-                }
-            } catch (error) {
-                console.error('❌ Sheets 저장 오류:', error);
-                return false;
-            }
-        }
-
-        // 동기화 함수
-        async function syncWithSheets() {
-            if (!sheetsApiUrl) {
-                alert('❌ Google Sheets URL을 먼저 설정해주세요.\n\n"📊 Sheets 연결" 버튼을 클릭하세요.');
-                return;
-            }
-
-            try {
-                const response = await fetch(sheetsApiUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ action: 'load' })
-                });
-                const result = await response.json();
-                
-                if (result.success && result.data) {
-                    parseSheetData(result.data);
-                    updateDashboard();
-                    loadBlogPosts();
-                    loadBudgetItems();
-                    alert('🔄 동기화 완료!\n\nGoogle Sheets에서 최신 데이터를 불러왔습니다.');
-                } else {
-                    alert('❌ 동기화 실패\n\nGoogle Sheets에서 데이터를 불러올 수 없습니다.');
-                }
-            } catch (error) {
-                console.error('동기화 오류:', error);
-                alert('❌ 동기화 실패\n\n' + error.message);
-            }
-        }
-
-        // Sheets 데이터 파싱
-        function parseSheetData(sheetData) {
-            const newBlogPosts = [];
-            const newBudgetItems = [];
-            const newSchedules = [];
-
-            sheetData.slice(1).forEach(row => {
-                if (row[1] && row[2]) {
-                    try {
-                        const data = JSON.parse(row[2]);
-                        
-                        if (row[1] === 'blog') {
-                            newBlogPosts.push({
-                                ...data,
-                                date: new Date(data.date)
-                            });
-                        } else if (row[1] === 'budget') {
-                            newBudgetItems.push({
-                                ...data,
-                                date: new Date(data.date)
-                            });
-                        } else if (row[1] === 'schedule') {
-                            newSchedules.push({
-                                ...data,
-                                date: new Date(data.date)
-                            });
-                        }
-                    } catch (e) {
-                        console.error('데이터 파싱 오류:', e);
-                    }
-                }
-            });
-
-            // 기존 데이터와 병합 (중복 제거)
-            blogPosts = mergePosts(blogPosts, newBlogPosts);
-            budgetItems = mergeItems(budgetItems, newBudgetItems);
-            schedules = mergeSchedules(schedules, newSchedules);
-            
-            // 로컬에도 저장
-            saveData();
-        }
-
-        // 데이터 병합 함수들
-        function mergePosts(existing, newData) {
-            const merged = [...existing];
-            newData.forEach(newPost => {
-                if (!merged.find(post => post.id === newPost.id)) {
-                    merged.push(newPost);
-                }
-            });
-            return merged;
-        }
-
-        function mergeItems(existing, newData) {
-            const merged = [...existing];
-            newData.forEach(newItem => {
-                if (!merged.find(item => item.id === newItem.id)) {
-                    merged.push(newItem);
-                }
-            });
+            console.log('
