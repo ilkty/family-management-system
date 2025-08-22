@@ -274,6 +274,8 @@
                         <span id="welcomeMessage"></span>
                         <span id="adminBadge" class="admin-badge" style="display: none;">운영자</span>
                     </div>
+                    <button class="btn" onclick="setupSheetsUrl()" style="margin-right: 10px; background: #27ae60;">📊 Sheets 연결</button>
+                    <button class="btn" onclick="syncWithSheets()" style="margin-right: 10px; background: #3498db;">🔄 동기화</button>
                     <button class="btn" onclick="logoutUser()">로그아웃</button>
                 </div>
                 <div class="nav-tabs">
@@ -461,6 +463,44 @@
         let budgetItems = [];
         let schedules = [];
 
+// Google Sheets API 관련 변수
+let sheetsApiUrl = '';
+
+// Google Sheets 저장 함수
+async function saveToSheets(type, data) {
+    if (!sheetsApiUrl) {
+        alert('Google Sheets URL을 먼저 설정해주세요.');
+        return false;
+    }
+
+    try {
+        const response = await fetch(sheetsApiUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                action: 'save',
+                type: type,
+                data: data
+            })
+        });
+        const result = await response.json();
+        return result.success;
+    } catch (error) {
+        console.error('Sheets 저장 오류:', error);
+        return false;
+    }
+}
+
+// URL 저장 함수
+function saveSheetsUrl() {
+    const url = prompt('Google Apps Script 웹 앱 URL을 입력하세요:');
+    if (url) {
+        sheetsApiUrl = url;
+        localStorage.setItem('sheetsApiUrl', url);
+        alert('URL이 저장되었습니다!');
+    }
+}
+        
         // 데이터 저장
         function saveData() {
             try {
@@ -817,8 +857,8 @@
             document.getElementById('scheduleDescription').value = '';
         }
 
-        // 데이터 추가 함수들
-        function saveBlogPost() {
+  // 수정된 블로그 저장 함수
+        async function saveBlogPost() {
             const title = document.getElementById('blogTitle').value;
             const content = document.getElementById('blogContent').value;
             
@@ -831,8 +871,13 @@
                     authorId: currentUser.id,
                     date: new Date()
                 };
+                
                 blogPosts.push(newPost);
-                saveData();
+                saveData(); // 로컬 저장
+                
+                // Google Sheets에도 저장
+                await saveToSheets('blog', newPost);
+                
                 loadBlogPosts();
                 updateDashboard();
                 closeBlogModal();
